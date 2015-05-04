@@ -1,0 +1,18 @@
+{
+  "name": "todo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "NODE_ENV='test' mocha --recursive"
+  },
+  "dependencies": {
+    "sequelize": "^3.1.1",
+    "sequelize-cli": "^1.7.0",
+    "sqlite3": "^3.0.8"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^2.2.4"
+  }
+}

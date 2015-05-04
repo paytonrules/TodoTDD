@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 Your Tasks
+  p
+    a(href="/") Home
+
+  h2 Tasks
+  each task in tasks
+    table
+      tr
+        td
+          p #{task.title}
+        td
+          form(name="delete_task", action='/users/' + userId + '/tasks/' + task.id + '?_method=DELETE', method='post')
+            input(type='submit', value='Delete')
+
+  form(name="create_task", action='/users/' + userId + '/tasks/', method='post')
+    input(type='text', name='title')
+    input(type='submit', value='Create Task')

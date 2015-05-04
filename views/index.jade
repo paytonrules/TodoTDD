@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  h2 Users
+  each user in users
+    p
+      a(href='/users/' + user.id + '/tasks') #{user.username}
+
+  form(name="create_user", action='users/', method="post")
+    input(type="text", name="username")
+    input(type="submit", value="Create User")
