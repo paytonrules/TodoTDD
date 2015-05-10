@@ -1,12 +1,25 @@
-var assert = require("assert");
+var expect = require("expect.js");
 
 describe("User Model", function() {
+  var models = require("../../models");
 
-  it("can be created", function() {
-    var models = require("../../models");
+  before(function() {
+    return models.sequelize.sync()
+  });
 
-    var createdUser = models.User.create();
+  it("can be created", function(done) {
+    models.User.create({username: "Eric"}).then(function(createdUser) {
+      expect(createdUser.username).to.equal("Eric");
+      done();
+    });
+  });
 
-    assert.ok(createdUser);
+  it("has many tasks", function(done) {
+    models.User.create({username: "Eric"}).then(function(createdUser) {
+      createdUser.getTasks().then(function(tasks) {
+        expect(tasks.length).to.be(0);
+        done();
+      });
+    });
   });
 });

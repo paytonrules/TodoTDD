@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha --recursive"
+    "test": "NODE_ENV='test' mocha --recursive"
   },
   "dependencies": {
     "body-parser": "~1.12.0",
@@ -19,6 +19,7 @@
     "sqlite3": "^3.0.5"
   },
   "devDependencies": {
+    "expect.js": "^0.3.1",
     "mocha": "^2.2.4"
   }
 }
