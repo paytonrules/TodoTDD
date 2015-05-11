@@ -18,6 +18,11 @@ describe("User Model", function() {
     models.User.create({username: "Eric"}).then(function(createdUser) {
       createdUser.getTasks().then(function(tasks) {
         expect(tasks.length).to.be(0);
+        return createdUser.createTask();
+      }).then(function() {
+        return createdUser.getTasks();
+      }).then(function(tasks) {
+        expect(tasks.length).to.be(1);
         done();
       });
     });
