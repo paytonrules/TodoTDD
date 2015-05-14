@@ -1,15 +1,15 @@
-var expect = require("expect.js");
 
 describe("User Model", function() {
   var models = require("../../models");
+  var expect = require("expect.js");
 
   before(function() {
     return models.sequelize.sync()
   });
 
-  it("can be created", function(done) {
-    models.User.create({username: "Eric"}).then(function(createdUser) {
-      expect(createdUser.username).to.equal("Eric");
+  it("can be built with a username", function(done) {
+    models.User.create({username: "Eric"}).then(function(builtUser) {
+      expect(builtUser.username).to.equal("Eric");
       done();
     });
   });
