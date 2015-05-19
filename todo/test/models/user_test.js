@@ -1,4 +1,3 @@
-
 describe("User Model", function() {
   var models = require("../../models");
   var expect = require("expect.js");
