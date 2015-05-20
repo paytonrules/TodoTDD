@@ -3,7 +3,11 @@ describe("User Model", function() {
   var expect = require("expect.js");
 
   before(function() {
-    return models.sequelize.sync()
+    return models.sequelize.sync().then(function() {
+      return models.User.destroy();
+    }).then(function() {
+      return models.Task.destroy();
+    });
   });
 
   it("can be built with a username", function(done) {

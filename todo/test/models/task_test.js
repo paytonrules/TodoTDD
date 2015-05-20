@@ -3,7 +3,11 @@ describe("Task Model", function() {
   var models = require("../../models");
 
   before(function() {
-    return models.sequelize.sync();
+    return models.sequelize.sync().then(function() {
+      return models.User.destroy();
+    }).then(function() {
+      return models.Task.destroy();
+    });
   });
 
   it("can be built with a title", function(done) {
