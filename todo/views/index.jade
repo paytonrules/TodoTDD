@@ -6,7 +6,8 @@ block content
 
   h2 Users
   each user in users
-    a(href='/users/' + user.id + '/tasks') #{user.username}
+    p
+      a(href='/users/' + user.id + '/tasks') #{user.username}
 
   form(name="create_user", action='users/', method="post")
     input(type="text", name="username")

@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/users', function(req, res, next) {
   models.User.create({username: req.body.username });
-  res.send('index');
+  res.redirect('/');
 });
 
 module.exports = router;

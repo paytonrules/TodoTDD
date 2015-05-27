@@ -37,8 +37,10 @@ describe("Index routes", function() {
         .post("/users")
         .type('form')
         .send({'username': 'paytonrules'})
-        .expect(200)
+        .expect(302, /to \//)
         .end(function(err, res) {
+          if (err) return done(err);
+
           models.User.findAll({}).then(function(users) {
             expect(users.length).to.be(1);
             expect(users[0].username).to.be('paytonrules');
