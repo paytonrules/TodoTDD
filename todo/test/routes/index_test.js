@@ -1,35 +1,53 @@
 describe("Index routes", function() {
   var express = require('express');
   var request = require('supertest');
-  var router = require("../../routes/index");
-  var path = require('path');
   var models = require("../../models");
-  var app;
+  var expect = require('expect.js');
+  var app = require("../../app.js");
 
-  before(function() {
-    app = express();
-    var views = __dirname + "/../../views";
-    app.set('views', path.join(__dirname, '/../../views'));
-    app.set('view engine', 'jade');
-    app.use(router);
-
+  beforeEach(function() {
     return models.sequelize.sync().then(function() {
       return models.User.destroy();
     });
-
   });
 
-  it("renders all the users", function(done) {
-    models.User.create({username: "Eric"}).then(function() {
-      models.User.create({username: "Paytonrules"}).then(function() {
+  describe("get /", function() {
+    it("renders all the users as a link to their tasks", function(done) {
+      models.User.create({username: "Eric"}).then(function(user1) {
+        models.User.create({username: "Paytonrules"}).then(function(user2) {
+          var firstUserLink = new RegExp('<a href="/users/' + user1.id + '/tasks">');
+          var secondUserLink = new RegExp('<a href="/users/' + user2.id + '/tasks">');
 
-        request(app)
-          .get('/')
-          .expect('Content-Type', /html/)
-          .expect(/Eric/)
-          .expect(/Paytonrules/)
-          .expect(200, done);
+          request(app)
+            .get('/')
+            .expect('Content-Type', /html/)
+            .expect(/Eric/)
+            .expect(/Paytonrules/)
+            .expect(firstUserLink)
+            .expect(secondUserLink)
+            .expect(200, done);
+        });
       });
     });
   });
+
+  describe("post /users", function() {
+    it("creates a user", function(done) {
+      request(app)
+        .post("/users")
+        .type('form')
+        .send({'username': 'paytonrules'})
+        .expect(200)
+        .end(function(err, res) {
+          models.User.findAll({}).then(function(users) {
+            expect(users.length).to.be(1);
+            expect(users[0].username).to.be('paytonrules');
+            done();
+          }).catch(function(err) {
+            done(err);
+          });
+        });
+    });
+  });
+
 });

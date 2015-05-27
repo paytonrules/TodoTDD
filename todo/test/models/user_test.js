@@ -2,7 +2,7 @@ describe("User Model", function() {
   var models = require("../../models");
   var expect = require("expect.js");
 
-  before(function() {
+  beforeEach(function() {
     return models.sequelize.sync().then(function() {
       return models.User.destroy();
     }).then(function() {
