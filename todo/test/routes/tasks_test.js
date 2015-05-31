@@ -89,4 +89,20 @@ describe("Tasks page - CRUD for tasks", function() {
       });
     });
   });
+
+  describe("delete /users/:userid/tasks/:taskid", function(done) {
+    it("should redirect back to the tasks page after a post", function(done) {
+      models.User.create({username: "Eric"}).then(function(user) {
+        return user.createTask({title: "finish chapter"});
+      }).then(function(task) {
+        indexLink = '/users/' + task.UserId + '/tasks/';
+        deleteLink = indexLink + task.id;
+
+        request(app)
+          .del(deleteLink)
+          .expect(302, new RegExp(indexLink), done);
+      });
+    });
+  });
+
 });
