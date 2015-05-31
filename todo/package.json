@@ -13,10 +13,10 @@
     "express": "~4.12.2",
     "jade": "~1.9.2",
     "morgan": "~1.5.1",
-    "sequelize": "^2.0.0-rc1",
+    "sequelize": "^3.1.1",
     "sequelize-cli": "^1.7.0",
     "serve-favicon": "~2.2.0",
-    "sqlite3": "^3.0.5"
+    "sqlite3": "^3.0.8"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",

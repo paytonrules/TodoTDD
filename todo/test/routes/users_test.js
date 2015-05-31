@@ -6,7 +6,7 @@ describe("Users page - CRUD for users", function() {
 
   beforeEach(function() {
     return models.sequelize.sync().then(function() {
-      return models.User.destroy();
+      return models.User.destroy({truncate: true});
     });
   });
 

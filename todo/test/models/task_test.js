@@ -4,9 +4,9 @@ describe("Task Model", function() {
 
   before(function() {
     return models.sequelize.sync().then(function() {
-      return models.User.destroy();
+      return models.User.destroy({truncate: true});
     }).then(function() {
-      return models.Task.destroy();
+      return models.Task.destroy({truncate: true});
     });
   });
 
