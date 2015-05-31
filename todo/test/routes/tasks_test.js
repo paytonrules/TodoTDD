@@ -93,9 +93,26 @@ describe("Tasks page - CRUD for tasks", function() {
 
         request(app)
           .del(deleteLink)
-          .expect(302, new RegExp(indexLink), done);
+          .expect(302, new RegExp(indexLink + "$"), done);
+      });
+    });
+
+    it("should delete the passed in task (duh)", function(done) {
+      models.User.create({username: "Eric"}).then(function(user) {
+        return user.createTask({title: "finish chapter"});
+      }).then(function(task) {
+        indexLink = '/users/' + task.UserId + '/tasks/';
+        deleteLink = indexLink + task.id;
+
+        request(app)
+          .del(deleteLink)
+          .end(function(_, res) {
+            models.Task.findById(task.id).then(function(task) {
+              expect(task).to.be(null);
+              done();
+            });
+          });
       });
     });
   });
-
 });
