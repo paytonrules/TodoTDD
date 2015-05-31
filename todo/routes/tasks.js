@@ -5,18 +5,15 @@ var router = express.Router({mergeParams: true});
 var models = require("../models");
 
 router.get('/', function(req, res, next) {
-  models.Task.findAll({where: {userId: req.params.userId}}).then(function(tasks) {
+  models.Task.findAll({where: {UserId: req.params.userId}}).then(function(tasks) {
     res.render('tasks', { userId: req.params.userId, tasks: tasks});
   });
 });
 
 router.post('/', function(req, res, next) {
-  models.User.findById(req.params.userId).then(function(user) {
-    models.Task.create({title: req.body.title}).then(function(task) {
-      return task.setUser(user);
-    }).then(function() {
-      res.redirect('/users/' + req.params.userId + '/tasks/');
-    });
+  models.Task.create({title: req.body.title,
+                     UserId: req.params.userId}).then(function(task) {
+    res.redirect('/users/' + req.params.userId + '/tasks/');
   });
 });
 

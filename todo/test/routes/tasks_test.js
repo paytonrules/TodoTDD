@@ -16,12 +16,8 @@ describe("Tasks page - CRUD for tasks", function() {
 
     it("should list all the tasks for a user", function(done) {
       models.User.create({username: "Eric"}).then(function(user) {
-        models.Task.create({title: "task 1"}).then(function(task) {
-          return task.setUser(user);
-        }).then(function(task) {
-          return models.Task.create({title: "task 2"});
-        }).then(function(task) {
-          return task.setUser(user);
+        user.createTask({title: "task 1"}).then(function() {
+          return user.createTask({title: "task 2"});
         }).then(function() {
           request(app)
             .get('/users/' + user.id + '/tasks')
@@ -35,18 +31,15 @@ describe("Tasks page - CRUD for tasks", function() {
 
     it("should not list tasks for other users", function(done) {
       models.User.create({username: "Eric"}).then(function(user) {
-        models.Task.create({title: "task 1"}).then(function(task) {
-          return task.setUser(user);
-        }).then(function() {
-          var notTheUser = user.id + 1;
+        models.Task.create({title: "task 1"}).then(function() {
           request(app)
-            .get('/users/' + notTheUser + '/tasks')
+            .get('/users/' + user.id + '/tasks')
             .end(function(err, res) {
               expect(res.text).not.to.match(/task 1/);
             })
             .expect(200, done);
-        })
-      })
+        });
+      });
     });
 
     it("includes the user in the response body for the form", function(done) {
@@ -81,7 +74,7 @@ describe("Tasks page - CRUD for tasks", function() {
           .post(indexLink)
           .send({'title' : 'Write Todolist app'})
           .end(function(err, res) {
-            models.Task.findOne({where: {userId: user.id}}).then(function(task) {
+            models.Task.findOne({where: {UserId: user.id}}).then(function(task) {
               expect(task.title).to.equal("Write Todolist app");
               done();
             });
