@@ -12,7 +12,7 @@ There are two requirements - node and sqlite. On Linx and OS X you probably alre
 
 ## Setup
 
-There is a vagrant file you can use, You can use the Vagrant file (I assume) or setup stuff that is required
+At this point you can get started pretty easily
 
 ```bash
 cd todo
