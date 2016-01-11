@@ -15,7 +15,7 @@ There are two requirements - node and sqlite. On Linx and OS X you probably alre
 At this point you can get started pretty easily
 
 ```bash
-cd todo
+cd TodoTDD
 npm install
 ```
 
