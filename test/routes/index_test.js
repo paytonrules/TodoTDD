@@ -1,7 +1,7 @@
 describe("Index page - routes right to users routes", function() {
   var http = require('http');
   var expect = require('expect.js');
-  var app = require('../../server.js');
+  var app = require('../../app.js');
 
   before(function() {
     app.start(8888);

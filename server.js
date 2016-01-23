@@ -1,7 +1,7 @@
 "use strict"
 
-var server = require("./server");
-server.start();
+var app = require("./app");
+app.start(8888);
 
 /*var express = require('express');
 var methodOverride = require('method-override');
