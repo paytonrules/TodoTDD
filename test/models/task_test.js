@@ -1,4 +1,4 @@
-describe("Task Model", function() {
+xdescribe("Task Model", function() {
   var expect = require("expect.js");
   var models = require("../../models");
 

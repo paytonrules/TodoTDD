@@ -1,4 +1,4 @@
-describe("User Model", function() {
+xdescribe("User Model", function() {
   var models = require("../../models");
   var expect = require("expect.js");
 

@@ -1,4 +1,9 @@
-var express = require('express');
+"use strict"
+
+var server = require("./server");
+server.start();
+
+/*var express = require('express');
 var methodOverride = require('method-override');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -61,4 +66,4 @@ app.use(function(err, req, res, next) {
 });
 
 
-module.exports = app;
+module.exports = app;*/
