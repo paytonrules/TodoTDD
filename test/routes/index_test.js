@@ -15,6 +15,7 @@ describe("Index page - routes right to users routes", function() {
     it ("redirects to users/", function(done) {
       http.get("http://localhost:8888", function(res) {
         expect(res.statusCode).to.equal(302);
+        expect(res.headers['location']).to.equal('/users/');
         done();
       });
     });
