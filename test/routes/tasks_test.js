@@ -38,13 +38,15 @@ describe("Tasks page - CRUD for tasks", function() {
       });
     });
 
-    xit("should not list tasks for unlinked users", function(done) {
+    it("should not list tasks for unlinked users", function(done) {
       var user;
       models.User.create({username: "Eric"}).then(function(newUser) {
         user = newUser;
         return models.Task.create({title: "task 1"});
       }).then(function(task) {
+        console.log("I have created the task");
         http.get('http://localhost:8888/users/' + user.id + '/tasks', function(res) {
+          console.log("I make the request");
           res.on('data', function(body) {
             expect(body.toString()).not.to.contain('task 1');
             done();

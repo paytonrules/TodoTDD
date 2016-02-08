@@ -21,7 +21,7 @@ module.exports = {
             tasks.forEach(function(task) {
               responseText += '<p>' + task.title + '</p>\n';
             });
-            response.write(responseText);
+            response.write("<div>" + responseText + "</div>");
             response.end();
           });
       }
