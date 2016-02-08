@@ -1,4 +1,4 @@
-xdescribe("Task Model", function() {
+describe("Task Model", function() {
   var expect = require("expect.js");
   var models = require("../../models");
 
@@ -20,7 +20,7 @@ xdescribe("Task Model", function() {
   it("belongs to a user", function(done) {
     models.Task.create({title: "book"}).then(function(task) {
       models.User.create({username: "Eric"}).then(function(user) {
-        return task.setUser(user)
+        return task.setUser(user);
       }).then(function(task) {
         return task.getUser();
       }).then(function(user) {
