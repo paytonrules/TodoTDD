@@ -5,17 +5,19 @@ describe("Tasks page - CRUD for tasks", function() {
   var app = require("../../app.js");
 
   before(function() {
-    return models.sequelize.sync().then(function() {
-      return models.User.destroy({truncate: true});
-    }).then(function() {
-      return models.Task.destroy({truncate: true});
-    }).then(function() {
-      app.start(8888);
-    });
+    app.start(8888);
   });
 
   after(function() {
     app.stop();
+  });
+
+  beforeEach(function() {
+    return models.sequelize.sync().then(function() {
+      return models.User.destroy({truncate: true});
+    }).then(function() {
+      return models.Task.destroy({truncate: true});
+    });
   });
 
   describe("get /users/:userid/tasks", function() {
@@ -44,9 +46,7 @@ describe("Tasks page - CRUD for tasks", function() {
         user = newUser;
         return models.Task.create({title: "task 1"});
       }).then(function(task) {
-        console.log("I have created the task");
         http.get('http://localhost:8888/users/' + user.id + '/tasks', function(res) {
-          console.log("I make the request");
           res.on('data', function(body) {
             expect(body.toString()).not.to.contain('task 1');
             done();
@@ -55,31 +55,41 @@ describe("Tasks page - CRUD for tasks", function() {
       });
     });
 
-    xit("includes the user in the response body for the form", function(done) {
+    it("includes the user in the response body for the form", function(done) {
       models.User.create({username: "Eric"}).then(function(user) {
-        request(app)
-          .get('/users/' + user.id + '/tasks')
-          .end(function(err, res) {
-            expect(res.text).to.contain("/users/" + user.id + "/tasks/");
+        http.get('http://localhost:8888/users/' + user.id + '/tasks', function(res) {
+          res.on('data', function(body) {
+            expect(body.toString()).to.contain("/users/" + user.id + "/tasks");
             done();
           });
+        });
       });
     });
   });
 
-  xdescribe("post /users/:userid/tasks", function() {
+  describe("post /users/:userid/tasks", function() {
 
     it("should redirect back to the tasks page after a post", function(done) {
       models.User.create({username: "Eric"}).then(function(user) {
-        indexLink = '/users/' + user.id + '/tasks/';
+        var indexLink = '/users/' + user.id + '/tasks/';
 
-        request(app)
-          .post(indexLink)
-          .expect(302, new RegExp(indexLink), done);
+        var requestOptions = {
+          hostName: "localhost",
+          path: indexLink,
+          port: 8888,
+          method: 'POST',
+          headers: {
+          }
+        };
+        console.log("DO REQUEST");
+        http.request(requestOptions, function(res) {
+          expect(res.statusCode).to.equal(302);
+          expect(res.headers.location).to.match(/users/);
+        });
       });
     });
 
-    it("should create a task for that user id with the passed in title", function(done) {
+    xit("should create a task for that user id with the passed in title", function(done) {
       models.User.create({username: "Eric"}).then(function(user) {
         indexLink = '/users/' + user.id + '/tasks/';
 

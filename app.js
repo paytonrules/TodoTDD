@@ -5,6 +5,7 @@ var server;
 module.exports = {
   start: function(port) {
     server = http.createServer(function(request, response) {
+      console.log("REQUEST");
       if (request.url === "/") {
         response.writeHead(302, {
           'Location': '/users/'
@@ -17,11 +18,11 @@ module.exports = {
             response.writeHead(200, {
               'content-type': 'html'
             });
-            var responseText = '';
+            var responseText = '/users/' + parts[2] + '/tasks';
             tasks.forEach(function(task) {
               responseText += '<p>' + task.title + '</p>\n';
             });
-            response.write("<div>" + responseText + "</div>");
+            response.write(responseText);
             response.end();
           });
       }
