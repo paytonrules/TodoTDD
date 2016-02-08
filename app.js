@@ -1,4 +1,5 @@
 var http = require("http");
+var models = require("./models");
 var server;
 
 module.exports = {
@@ -8,13 +9,22 @@ module.exports = {
         response.writeHead(302, {
           'Location': '/users/'
         });
+        response.end();
       } else {
-        response.writeHead(200, {
-          'content-type': 'html'
-        });
-        response.write('task 1 task 2');
+        var parts = request.url.split('/');
+        models.Task.findAll({where: {UserId: parts[2]}})
+          .then(function(tasks) {
+            response.writeHead(200, {
+              'content-type': 'html'
+            });
+            var responseText = '';
+            tasks.forEach(function(task) {
+              responseText += '<p>' + task.title + '</p>\n';
+            });
+            response.write(responseText);
+            response.end();
+          });
       }
-      response.end();
     });
     server.listen(port);
   },

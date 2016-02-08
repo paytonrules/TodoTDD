@@ -38,15 +38,17 @@ describe("Tasks page - CRUD for tasks", function() {
       });
     });
 
-    xit("should not list tasks for other users", function(done) {
-      models.User.create({username: "Eric"}).then(function(user) {
-        models.Task.create({title: "task 1"}).then(function() {
-          request(app)
-            .get('/users/' + user.id + '/tasks')
-            .end(function(err, res) {
-              expect(res.text).not.to.match(/task 1/);
-            })
-          .expect(200, done);
+    xit("should not list tasks for unlinked users", function(done) {
+      var user;
+      models.User.create({username: "Eric"}).then(function(newUser) {
+        user = newUser;
+        return models.Task.create({title: "task 1"});
+      }).then(function(task) {
+        http.get('http://localhost:8888/users/' + user.id + '/tasks', function(res) {
+          res.on('data', function(body) {
+            expect(body.toString()).not.to.contain('task 1');
+            done();
+          });
         });
       });
     });
