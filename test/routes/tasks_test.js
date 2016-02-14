@@ -3,6 +3,7 @@ describe("Tasks page - CRUD for tasks", function() {
   var models = require("../../models");
   var expect = require('expect.js');
   var app = require("../../app.js");
+  var querystring = require("querystring");
 
   before(function() {
     app.start(8888);
@@ -30,9 +31,9 @@ describe("Tasks page - CRUD for tasks", function() {
           http.get('http://localhost:8888/users/' + user.id + '/tasks', function(res) {
             expect(res.statusCode).to.equal(200);
             expect(res.headers['content-type']).to.equal('html');
-            res.on('data', function(body) {
-              expect(body.toString()).to.contain('task 1');
-              expect(body.toString()).to.contain('task 2');
+            res.on('data', function(chunk) {
+              expect(chunk.toString()).to.contain('task 1');
+              expect(chunk.toString()).to.contain('task 2');
               done();
             });
           });
@@ -78,30 +79,37 @@ describe("Tasks page - CRUD for tasks", function() {
           path: indexLink,
           port: 8888,
           method: 'POST',
-          headers: {
-          }
+          headers: {}
         };
-        console.log("DO REQUEST");
-        http.request(requestOptions, function(res) {
+        var request = http.request(requestOptions, function(res) {
           expect(res.statusCode).to.equal(302);
           expect(res.headers.location).to.match(/users/);
+          done();
         });
+        request.write(querystring.stringify({}));
+        request.end();
       });
     });
 
-    xit("should create a task for that user id with the passed in title", function(done) {
+    it("should create a task for that user id with the passed in title", function(done) {
       models.User.create({username: "Eric"}).then(function(user) {
         indexLink = '/users/' + user.id + '/tasks/';
 
-        request(app)
-          .post(indexLink)
-          .send({'title' : 'Write Todolist app'})
-          .end(function(err, res) {
-            models.Task.findOne({where: {UserId: user.id}}).then(function(task) {
-              expect(task.title).to.equal("Write Todolist app");
-              done();
-            });
+        var requestOptions = {
+          hostname: "localhost",
+          path: indexLink,
+          port: 8888,
+          method: 'POST',
+          headers: {}
+        };
+        var request = http.request(requestOptions, function(res) {
+          models.Task.findOne({where: {UserId: user.id}}).then(function(task) {
+            expect(task.title).to.equal("Write Todolist app");
           });
+          done();
+        });
+        request.write(querystring.stringify({'title' : 'Write Todolist app'}));
+        request.end();
       });
     });
   });
