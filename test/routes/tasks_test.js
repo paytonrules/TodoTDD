@@ -114,17 +114,29 @@ describe("Tasks page - CRUD for tasks", function() {
     });
   });
 
-  xdescribe("delete /users/:userid/tasks/:taskid", function(done) {
-    it("should redirect back to the tasks page after a post", function(done) {
+  describe("delete /users/:userid/tasks/:taskid", function(done) {
+    it("should redirect back to the tasks page after a delete", function(done) {
       models.User.create({username: "Eric"}).then(function(user) {
         return user.createTask({title: "finish chapter"});
       }).then(function(task) {
         indexLink = '/users/' + task.UserId + '/tasks/';
         deleteLink = indexLink + task.id;
 
-        request(app)
-          .del(deleteLink)
-          .expect(302, new RegExp(indexLink + "$"), done);
+        var requestOptions = {
+          hostname: 'localhost',
+          path: deleteLink,
+          port: 8888,
+          method: 'POST',
+          headers: {}
+        };
+        var request = http.request(requestOptions, function(res) {
+          var expectedRedirect = new RegExp(indexLink + "$");
+          expect(res.statusCode).to.equal(302);
+          expect(res.headers.location).to.match(expectedRedirect);
+          done();
+        });
+        request.write(JSON.stringify({_method: 'DELETE'}));
+        request.end();
       });
     });
 
@@ -135,14 +147,55 @@ describe("Tasks page - CRUD for tasks", function() {
         indexLink = '/users/' + task.UserId + '/tasks/';
         deleteLink = indexLink + task.id;
 
-        request(app)
-          .del(deleteLink)
-          .end(function(_, res) {
-            models.Task.findById(task.id).then(function(task) {
-              expect(task).to.be(null);
-              done();
-            });
+        var requestOptions = {
+          hostname: 'localhost',
+          path: deleteLink,
+          port: 8888,
+          method: 'POST',
+          headers: {}
+        };
+        var request = http.request(requestOptions, function(res) {
+          models.Task.findOne({where: {id: task.id}}).then(function(task) {
+            expect(task).to.equal(null);
+            done();
           });
+        });
+        request.write(JSON.stringify({_method: 'DELETE'}));
+        request.end();
+      });
+    });
+
+    it('only deletes the task passed in', function(done) {
+      var task1, task2, createdUser;
+      models.User.create({username: "Eric"}).then(function(user) {
+        createdUser = user;
+        return user.createTask({title: "finish chapter"});
+      }).then(function(task) {
+        task1 = task;
+        return createdUser.createTask({title: "start next chapter"});
+      }).then(function(task) {
+        task2 = task;
+        indexLink = '/users/' + task2.UserId + '/tasks/';
+        deleteLink = indexLink + task2.id;
+
+        var requestOptions = {
+          hostname: 'localhost',
+          path: deleteLink,
+          port: 8888,
+          method: 'POST',
+          headers: {}
+        };
+        var request = http.request(requestOptions, function(res) {
+          models.Task.findOne({where: {id: task2.id}}).then(function(deletedTask) {
+            expect(deletedTask).to.equal(null);
+            return models.Task.findOne({where: {id: task1.id}});
+          }).then(function(foundTask) {
+            expect(foundTask.id).to.equal(task1.id);
+            done();
+          });
+        });
+        request.write(JSON.stringify({_method: 'DELETE'}));
+        request.end();
       });
     });
   });
