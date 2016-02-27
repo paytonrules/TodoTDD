@@ -19,5 +19,12 @@ describe("Index page - routes right to users routes", function() {
         done();
       });
     });
+
+    it ("does stuff", function(doneringdong) {
+      http.get("http://localhost:8888/thingthatwontexist", function(res) {
+        expect(res.statusCode).to.equal(404);
+        doneringdong();
+      });
+    });
   });
 });
