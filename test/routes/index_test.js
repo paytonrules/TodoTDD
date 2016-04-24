@@ -20,7 +20,7 @@ describe("Index page - routes right to users routes", function() {
       });
     });
 
-    it ("does stuff", function(doneringdong) {
+    it ("returns a 404 for non-existent paths", function(doneringdong) {
       http.get("http://localhost:8888/thingthatwontexist", function(res) {
         expect(res.statusCode).to.equal(404);
         doneringdong();
