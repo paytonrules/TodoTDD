@@ -18,7 +18,7 @@ var findAllTasks = function(request, response) {
         'content-type': 'html'
       });
       var responseText = '/users/' + parts[2] + '/tasks';
-      tasks.forEach(function(task) { responseText += '<p>' + task.title + '</p>\n'; });
+      tasks.forEach(function(task) { console.log(task); responseText += '<p>' + task.title + '</p>\n'; });
       response.write(responseText);
       response.end();
     });
