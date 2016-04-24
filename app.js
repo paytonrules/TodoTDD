@@ -18,9 +18,7 @@ var findAllTasks = function(request, response) {
         'content-type': 'html'
       });
       var responseText = '/users/' + parts[2] + '/tasks';
-      tasks.forEach(function(task) {
-        responseText += '<p>' + task.title + '</p>\n';
-      });
+      tasks.forEach(function(task) { responseText += '<p>' + task.title + '</p>\n'; });
       response.write(responseText);
       response.end();
     });
@@ -29,7 +27,10 @@ var findAllTasks = function(request, response) {
 module.exports = {
   start: function(port) {
     server = http.createServer(function(request, response) {
-      if (request.url === "/") {
+      if (request.url === "/thingthatwontexist") {
+        response.writeHead(404);
+        response.end();
+      } else if (request.url === "/") {
         redirect(response, '/users/');
       } else {
         if (request.method === 'GET') {
