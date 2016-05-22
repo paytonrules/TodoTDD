@@ -4,7 +4,7 @@ Written for the Real World Guide to TDD.
 
 ## Prereqs
 
-There are two requirements - node and sqlite. On Linx and OS X you probably already have these, but if you dont you can install both here:
+There are two requirements - node and sqlite. On Linux and OS X you probably already have these, but if you dont you can install both here:
 
 [Nodejs](https://nodejs.org/en/)
 
