@@ -24,31 +24,38 @@ var findAllTasks = function(request, response) {
     });
 };
 
+var FILE_NOT_FOUND = 404;
+var SUCCESS = 200;
+var ROOT_PATH = "/";
+var USERS_PATH = "/users/";
+var GET_METHOD = "GET";
+var TASKS_PATH = "/tasks";
+
 module.exports = {
   start: function(port) {
     var self = this;
     server = http.createServer(function(request, response) {
-      if (request.url === "/thingthatwontexist") {
-        response.writeHead(404);
+      var FOUR_OR_FOUR_URL = "/thingthatwontexist";
+      if (request.url === FOUR_OR_FOUR_URL) {
+        response.writeHead(FILE_NOT_FOUND);
         response.end();
-      } else if (request.url === "/") {
-        redirect(response, '/users/');
+      } else if (request.url === ROOT_PATH) {
+        redirect(response, USERS_PATH);
       } else {
-        if (request.method === 'GET') {
-          if (request.url === "/users/") {
-            response.writeHead(200, {
+        if (request.method === GET_METHOD) {
+          if (request.url === USERS_PATH) {
+            response.writeHead(SUCCESS, {
               'content-type': 'html'
             });
-            var responseText = '';
             models.User.findAll()
               .then(function(users) {
-                var responseText = '';
+                var responseBody = '';
                 users.forEach(function(user) {
-                  responseText += '<a href="/users/' + user.id + '/tasks">';
-                  responseText += user.username;
-                  responseText += '</a>';
+                  responseBody += "<a href=\"" +  USERS_PATH  + user.id + TASKS_PATH + "\">";
+                  responseBody += user.username;
+                  responseBody += "</a>";
                 });
-                response.write(responseText);
+                response.write(responseBody);
                 response.end();
               });
           } else {
