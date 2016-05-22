@@ -20,10 +20,14 @@ describe("Index page - routes right to users routes", function() {
       });
     });
 
-    it ("returns a 404 for non-existent paths", function(done) {
+    it ("returns a 404 for non-existent path #{}", function(done) {
       http.get("http://localhost:8888/thingthatwontexist", function(res) {
         expect(res.statusCode).to.equal(404);
-        done();
+
+        http.get("http://localhost:8888/thingthatalsowontexist", function(res) {
+          expect(res.statusCode).to.equal(404);
+          done();
+        });
       });
     });
   });

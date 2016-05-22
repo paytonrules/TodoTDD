@@ -28,15 +28,23 @@ var FILE_NOT_FOUND = 404;
 var SUCCESS = 200;
 var ROOT_PATH = "/";
 var USERS_PATH = "/users/";
+var CREATE_USERS_PATH = "/users";
 var GET_METHOD = "GET";
 var TASKS_PATH = "/tasks";
+
+var isValidPrefix = function (url) {
+  if (url === ROOT_PATH ||
+      url.slice(0, CREATE_USERS_PATH.length) === CREATE_USERS_PATH) {
+    return true;
+  }
+  return false;
+};
 
 module.exports = {
   start: function(port) {
     var self = this;
     server = http.createServer(function(request, response) {
-      var FOUR_OR_FOUR_URL = "/thingthatwontexist";
-      if (request.url === FOUR_OR_FOUR_URL) {
+      if (!isValidPrefix(request.url)) {
         response.writeHead(FILE_NOT_FOUND);
         response.end();
       } else if (request.url === ROOT_PATH) {
