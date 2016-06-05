@@ -12,13 +12,13 @@ var redirect = function(response, path) {
 
 var findAllTasks = function(request, response) {
   var parts = request.url.split('/');
-  models.Task.findAll({where: {UserId: parts[2]}})
+      models.Task.findAll({where: {UserId: parts[2]}})
     .then(function(tasks) {
-      response.writeHead(200, {
-        'content-type': 'html'
-      });
+  response.writeHead(200, {
+                                    'content-type': 'html'
+    });
       var responseText = '/users/' + parts[2] + '/tasks';
-      tasks.forEach(function(task) { responseText += '<p>' + task.title + '</p>\n'; });
+      tasks.forEach(function(task) { console.log(task); responseText += '<p>' + task.title + '</p>\n'; });
       response.write(responseText);
       response.end();
     });
