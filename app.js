@@ -28,6 +28,7 @@ var findAllTasks = function(request, response) {
 
 module.exports = {
   start: function(port) {
+    var self = this;
     server = http.createServer(function(request, response) {
       if (request.url === "/thingthatwontexist") {
         response.writeHead(404);
