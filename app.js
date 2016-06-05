@@ -27,7 +27,10 @@ var findAllTasks = function(request, response) {
 module.exports = {
   start: function(port) {
     server = http.createServer(function(request, response) {
-      if (request.url === "/") {
+      if (request.url === "/thingthatwontexist") {
+        response.writeHead(404);
+        response.end();
+      } else if (request.url === "/") {
         redirect(response, '/users/');
       } else {
         if (request.method === 'GET') {
