@@ -19,7 +19,6 @@ var findAllTasks = function(request, response) {
       });
       var responseText = '/users/' + parts[2] + '/tasks';
       tasks.forEach(function(task) {
-        console.log(task);
         responseText += '<p>' + task.title + '</p>\n';
       });
       response.write(responseText);
