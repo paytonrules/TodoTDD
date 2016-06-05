@@ -96,9 +96,12 @@ module.exports = {
     });
     server.listen(port);
   },
-
   stop: function() {
     server.close();
   }
 };
+
+module.exports.findAllTasks = findAllTasks;
+
+
 
